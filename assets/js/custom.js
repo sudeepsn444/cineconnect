@@ -19,6 +19,29 @@ function preview()
 }
 
 
+//for preview the profile image
+var profile_input=document.querySelector("#select_profile_img");
+$("#select_profile_img").click(function(){
+  profile_input.addEventListener("change",preview_profile);
+})
+
+
+function preview_profile()
+{
+    var filobject_profile=this.files[0];
+    var filereader_profile=new FileReader();
+
+    filereader_profile.readAsDataURL(filobject_profile);
+
+    filereader_profile.onload=function()
+    {
+        var image_src= filereader_profile.result;
+        var image=document.querySelector("#profile_img");
+        image.setAttribute('src',image_src)
+    }
+}
+
+
 
 
 
@@ -437,5 +460,32 @@ else {
   document.querySelector('.mobile-nav').style.display = 'none';
   document.querySelector('.hideme').style.display = 'block';
 }
+
+
+
+// let options={
+//   root:null,
+//   rootMargin:'0px',
+//   threshold:1.0
+// };
+// let callback=(entries,observer)=>{
+//   entries.forEach(entry=>{
+//     if(entry.target.id=="myvideo")
+//     {
+//       if(entry.isIntersecting)
+//       {
+//         entry.target.play();
+//       }
+//       else
+//       {
+//         entry.target.pause();
+//       }
+//     }
+//   });
+// }
+// let observer=new IntersectionObserver(callback,options);
+
+// observer.observe(document.querySelector('#myvideo'));
+
 
 

@@ -7,11 +7,9 @@ global $follow_suggestion;
 	<div class="main-body">
 		<div class="row">
 			
-			<div class="col-lg-3 " style="margin-top: 10px; position: -webkit-sticky;position: sticky; top: 0;" id="" >
+			<div class="col-lg-3 " style="margin-top: 10px;">
 				<div class="hideme" style="display:none;">
-						<?php
-							showError('post_img');
-						?>
+						
         				<div class="card-body">
 							<div class="d-flex flex-column align-items-center text-center">
 								<img src="assets/images/profile/<?=$user['profile_pic']?>" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
@@ -59,6 +57,18 @@ global $follow_suggestion;
             		</div>
 					<hr>
 					<?php
+						showError('post_img');
+						
+  						if(isset($_GET['new_post_added']))
+  						{
+  						  ?>
+  						    <div class="alert alert-success" style="border-radius: 1em;" role="alert">
+  						      You have succesfully posted
+  						    </div>
+  						  <?php
+  						}
+					?>
+					<?php
     				foreach($posts as $post)
     				{
 						$comments=getComments($post['id']);
@@ -84,8 +94,34 @@ global $follow_suggestion;
     						<div class="card-body p-0" >
     						    <div class="card">
     						        <!--post content-->
-    						        <img src="assets/images/posts/<?=$post['post_img']?>"  class="d-flex " alt="...">
-    						        <!--<video autoplay loop src="assets/images/posts/video.mp4">-->
+									<?php
+    						        if(!$post['post_img']=="")
+    						        {
+										if($post['type']=="jpg"||$post['type']=="jpeg"||$post['type']=="png")
+										{
+    						        	?>
+    						        	<img src="assets/images/posts/<?=$post['post_img']?>"  class="d-flex " alt=" ...">
+										<?php
+										}
+										elseif($post['type']=="mkv"||$post['type']=="mp4")
+										{
+										?>
+										<div class="d-flex ">
+    						        	<video auto id="myvideo<?=$post['id']?>" controls src="assets/images/posts/<?=$post['post_img']?>" width="100%" height="auto" alt="...">
+										</div>
+										
+										<?php
+										}
+									}
+									else
+									{
+    						        ?>
+									<div class="card-body" style="padding-left: 5;padding-left: 5px;padding-right: 5px;padding-top: 5px;padding-bottom: 5px;">
+    						            <p class="h3"><?=$post['post_text']?></p>
+    						        </div>
+									<?php
+									}
+									?>
     						        <!--end of post content-->
 									<span style="font-size: x-larger;" class="p-2">
 										<?php
@@ -100,15 +136,13 @@ global $follow_suggestion;
 											$display_unlike = 'none';
 										}
 										?>
-	
-											<i class="bi-heart-fill text-danger unlike_btn" style="display:<?=$display_unlike?>"  data-post-Id='<?=$post['id']?>'></i>
-											<i class="bi-heart like_btn" style="display:<?=$display_like?>"  data-post-Id='<?=$post['id']?>'></i>
-											&nbsp;&nbsp;&nbsp;<span data-bs-toggle="modal" data-bs-target="#comments<?=$post['id']?>"><i class="bi-chat-left text-dark " ></i>  <span  class="pl-2 text-small text-muted">&nbsp;<?=count($comments)?> comments</span></span>
+										<i class="bi-heart-fill text-danger unlike_btn" style="display:<?=$display_unlike?>"  data-post-Id='<?=$post['id']?>'></i>
+										<i class="bi-heart like_btn" style="display:<?=$display_like?>"  data-post-Id='<?=$post['id']?>'></i><span class="pl-2 text-small text-muted" data-bs-toggle="modal" data-bs-target="#likes<?=$post['id']?>"><?=count($likes)?> likes </span>
+										&nbsp;&nbsp;&nbsp;<span data-bs-toggle="modal" data-bs-target="#comments<?=$post['id']?>"><i class="bi-chat-left text-dark " ></i>  <span  class="pl-2 text-small text-muted">&nbsp;<?=count($comments)?> comments</span></span>
 									</span>
-										<span class="pl-2 text-small text-muted" data-bs-toggle="modal" data-bs-target="#likes<?=$post['id']?>"><?=count($likes)?> likes </span>
 										
 									<?php
-    						        if($post['post_text'])
+    						        if($post['post_text']&&$post['post_img'])
     						        {
     						        ?>
 									
@@ -128,51 +162,40 @@ global $follow_suggestion;
     						</div>
     					<!--end of post-->
     					</div>
+
 					</div>
 
 					<!-- who commented popup-->
-									<div class="modal fade" id="comments<?=$post['id']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    								    <div class="modal-dialog modal-xl">
+					<div class="modal fade" id="comments<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    								    <div class="modal-dialog ">
     								        <div class="modal-content">
-
-    								            <div class="modal-body d-flex p-0">
-    								                <div class="col-8">
-    								                    <img src="assets/images/posts/<?=$post['post_img']?>" class="w-100 rounded-start">
-    								                </div>
-
-
-
-    								                <div class="col-4 d-flex flex-column">
-    								                    <div class="d-flex align-items-center p-2 border-bottom">
-    								                        <div><img src="assets/images/profile/<?=$post['profile_pic']?>" alt="" height="50" class="rounded-circle border">
-    								                        </div>
-    								                        <div>&nbsp;&nbsp;&nbsp;</div>
-    								                        <div class="d-flex flex-column justify-content-start align-items-center">
-    								                            <h6 style="margin: 0px;"><?=$post['name']?>&nbsp;&nbsp;<?=verified($post['profession'])?'<i class="bi-patch-check-fill text-primary"></i>':''?></h6>
-    								                            <h7 style="margin:0px;" class="text-muted">@<?=$post['username']?></h7>
-    								                        </div>
-    								                    </div>
-    								                    <div class="flex-fill align-self-stretch overflow-auto" id="comment-section<?=$post['id']?>" style="height: 100px;">
+											<div class="modal-header">
+											<h5>Comments</h5>
+												
+												<a type="button" class="ti-close" data-bs-dismiss="modal" aria-label="Close"></a>
+												<hr>
+											</div>
+    								            <div class="modal-body  d-flex-fluid flex-row p-0">
+													 <div class="col ">
+    								                    <div class="flex-fill align-self-stretch overflow-auto" id="comment-section<?= $post['id'] ?>" style="height: 100px;">
 
 														<?php
-														$comments=getComments($post['id']);
-														if(count($comments)<1)
-														{
+														$comments = getComments($post['id']);
+														if (count($comments) < 1) {
 															echo '<h3 class=" nce p-5 bg-white border rounded text-center text-muted" >No Comments</h3>';
 														}
-														
-														foreach ($comments as $comment) 
-														{
-															$cuser=getUser($comment['user_id'])
-														?>
+
+														foreach ($comments as $comment) {
+															$cuser = getUser($comment['user_id'])
+																?>
     								                        
 															<div class="d-flex align-items-center p-2">
-    								                            <div><img src="assets/images/profile/<?=$cuser['profile_pic']?>" alt="" height="40" class="rounded-circle border">
+    								                            <div><img src="assets/images/profile/<?= $cuser['profile_pic'] ?>" alt="" height="40" class="rounded-circle border">
     								                            </div>
     								                            <div>&nbsp;&nbsp;&nbsp;</div>
     								                            <div class="d-flex flex-column justify-content-start align-items-start">
-																	<a href="?u=<?=$cuser['username']?>" class="text-decoration-none text-dark"><p class="text-muted align-items-left mb-0">@<?=$cuser['username']?> <?=verified($cuser['profession'])?'<i class="bi-patch-check-fill text-primary"></i>':''?></p></a>
-																	<p style="margin:0px;" class="text-muted"><?=$comment['comment']?></p>
+																	<a href="?u=<?= $cuser['username'] ?>" class="text-decoration-none text-dark"><p class="text-muted align-items-left mb-0">@<?= $cuser['username'] ?> <?= verified($cuser['profession']) ? '<i class="bi-patch-check-fill text-primary"></i>' : '' ?></p></a>
+																	<p style="margin:0px;" class="text-muted"><?= $comment['comment'] ?></p>
     								                            </div>
     								                        </div>
 
@@ -183,7 +206,7 @@ global $follow_suggestion;
     								                    <div class="input-group p-2 border-top">
     								                        <input type="text" class="form-control rounded-0 border-0 comment-input" placeholder="say something.."
     								                            aria-label="Recipient's username" aria-describedby="button-addon2">
-    								                        <button class="btn btn-outline-primary rounded-0 border-0 add-comment" dat-page='wall' data-cs="comment-section<?=$post['id']?>" data-post-id="<?=$post['id']?>" type="button"
+    								                        <button class="btn btn-outline-primary rounded-0 border-0 add-comment" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
     								                            id="button-addon2">Post</button>
     								                    </div>
     								                </div>
@@ -195,7 +218,7 @@ global $follow_suggestion;
     								        </div>
     								    </div>
     								</div>
-
+									
 					<!-- who liked popup -->
 					<div class="modal fade" id="likes<?=$post['id']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 						<div class="modal-dialog ">

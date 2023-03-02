@@ -208,7 +208,7 @@ if(isset($_GET['updateprofile']))
 //for managing add post
 if(isset($_GET['addpost']))
 {
-    $response = validatePost($_FILES['post_img']);
+    $response = validatePost($_POST['post_text'],$_FILES['post_img']);
     if($response['status'])
     {
         if(createPost($_POST,$_FILES['post_img']))
@@ -217,7 +217,7 @@ if(isset($_GET['addpost']))
         }
         else
         {
-            echo "spmthing went wrong";
+            echo "something went wrong";
         }
     }
     else

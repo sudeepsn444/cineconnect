@@ -97,7 +97,7 @@ global $user;
 												elseif(!checkFollowStatus($profile['id']))
 												{
 													?>
-													<button class="btn btn-primary followbtn connect-reload" data-user-Id=<?=$profile['id']?>  >connect</button>
+													<button class="btn btn-primary followbtn connect-reload" data-user-Id=<?=$profile['id']?>>connect</button>
 													<?php
 												}
 											?>
@@ -180,8 +180,8 @@ global $user;
 					
 					
 					
-						<div class="card shadow-sm " style="margin-top:20px;border-radius:1px;" >
-						<div class="card-body mt-10" style="padding: 10px; margin-top:10px;">
+						<div class="card shadow-sm " style="margin-top:20px;" >
+						<div class="card-body mt-10 justify-content-end" >
 						<?php
 							if(checkBS($profile['id']))
 							{
@@ -193,29 +193,52 @@ global $user;
 						<?php
 							}
 						?>
-							<div class=" d-flex-fluid flex-wrap justify-content-left ">
+						<div class=" d-flex-fluid " >
+							<div class=" d-flex flex-wrap justify-content-around" >
 								<?php
 								if (checkFollowStatus($profile['id'])||($user['id'] == $profile['id'])) {
 
-									foreach ($profile_post as $post) {
+									foreach ($profile_post as $post) 
+									{
+										$comments=getComments($post['id']);
+										$likes = getLikes($post['id']);
 										?>
-									<img src="assets/images/posts/<?= $post['post_img'] ?>" width="352px" style="margin: 4px;" data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>"/>
-									
-									
+									<div class="d-flex align-items-center" >
+									<?php
+    						        if(!$post['post_img']=="")
+    						        {
+										if($post['type']=="jpg"||$post['type']=="jpeg"||$post['type']=="png")
+										{
+    						        	?>
+    						        	<img src="assets/images/posts/<?= $post['post_img'] ?>" width="345px" style="margin: 4px;" data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>"/>
+										<?php
+										}
+										elseif($post['type']=="mkv"||$post['type']=="mp4")
+										{
+										?>
+										<img src="assets/images/posts/video-thumbnail.jpg" width="345px" style="margin: 4px;" data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>">
+										<?php
+										}
+									}
+									else
+									{
+    						        ?>
+									<div class="card-body" style="padding-left: 5;padding-left: 5px; width:345px; padding-right: 5px;padding-top: 5px;padding-bottom: 5px;" data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>">
+    						            <p class="h5"><?=$post['post_text']?></p>
+    						        </div>
+									<?php
+									}
+									?>
+									</div>
 									<!-- this is for postview-->
     								<div class="modal fade" id="postview<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    								    <div class="modal-dialog modal-xl">
+    								    <div class="modal-dialog ">
     								        <div class="modal-content">
 
-    								            <div class="modal-body d-flex p-0">
-    								                <div class="col-8">
-    								                    <img src="assets/images/posts/<?= $post['post_img'] ?>" class="w-100 rounded-start">
-    								                </div>
-
-
-
-    								                <div class="col-4 d-flex flex-column">
-    								                    <div class="d-flex align-items-center p-2 border-bottom">
+    								            <div class="modal-body  d-flex-fluid flex-row p-0">
+													
+    								                <div class="col p-0">
+														<div class="d-flex align-items-center p-2 border-bottom">
     								                        <div><img src="assets/images/profile/<?= $profile['profile_pic'] ?>" alt="" height="50" class="rounded-circle border">
     								                        </div>
     								                        <div>&nbsp;&nbsp;&nbsp;</div>
@@ -224,6 +247,58 @@ global $user;
     								                            <h7 style="margin:0px;" class="text-muted">@<?= $profile['username'] ?></h7>
     								                        </div>
     								                    </div>
+    								                    
+															<?php
+    						        						if(!$post['post_img']=="")
+    						        						{
+																if($post['type']=="jpg"||$post['type']=="jpeg"||$post['type']=="png")
+																{
+    						        							?>
+    						        							<img src="assets/images/posts/<?= $post['post_img'] ?>"   class="w-100 rounded-start">
+																<?php
+																}
+																elseif($post['type']=="mkv"||$post['type']=="mp4")
+																{
+																?>
+																<video controls src="assets/images/posts/<?= $post['post_img'] ?>" class="w-100 rounded-start">
+																<?php
+																}
+															}
+															else
+															{
+    						        						?>
+															<div class="card-body" style="padding: 20px;">
+    						        						    <p class="h3"><?=$post['post_text']?></p>
+    						        						</div>
+															<?php
+															}
+															?>
+    								                	
+    								                </div>
+													<div class=" col p-2">
+														<span style="font-size: x-larger;" class="p-2">
+															<?php
+															if (checkLikeStatus($post['id'])) 
+															{
+																$display_like = 'none';
+																$display_unlike = '';
+															}
+															else
+															{
+																$display_like = '';
+																$display_unlike = 'none';
+															}
+															?>
+																<i class="bi-heart-fill text-danger unlike_btn" style="display:<?=$display_unlike?>"  data-post-Id='<?=$post['id']?>'></i>
+																<i class="bi-heart like_btn" style="display:<?=$display_like?>"  data-post-Id='<?=$post['id']?>'></i><span class="pl-2 text-small text-muted" data-bs-toggle="modal" data-bs-target="#like<?=$post['id']?>"><?=count($likes)?> likes </span>
+																&nbsp;&nbsp;&nbsp;<i class="bi-chat-left text-dark " ></i>  <span  class="pl-2 text-small text-muted">&nbsp;<?=count($comments)?> comments</span>
+														</span>
+													</div>
+			
+													
+
+    								                <div class="col ">
+    								                    
     								                    <div class="flex-fill align-self-stretch overflow-auto" id="comment-section<?= $post['id'] ?>" style="height: 100px;">
 
 														<?php
@@ -257,7 +332,7 @@ global $user;
     								                            id="button-addon2">Post</button>
     								                    </div>
     								                </div>
-
+																		
 
 
     								            </div>
@@ -265,7 +340,61 @@ global $user;
     								        </div>
     								    </div>
     								</div>
-								
+									<!-- who liked -->
+									<div class="modal fade" id="like<?=$post['id']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+										<div class="modal-dialog ">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">Likes</h5>
+													<a type="button" class="ti-close" data-bs-dismiss="modal" aria-label="Close"></a>
+													<hr>
+												</div>
+												<div class="modal-body">
+													<div class="table-responsive">
+														<table class="table  table-striped table-borderless mb-2" >
+															<?php
+															if(count($likes)<1)
+															{
+																echo '<h3 class=" p-5 bg-white border rounded text-center text-muted" >No likes</h3>';
+															}
+															foreach($likes as $f)
+															{
+																$fuser = getUser($f['user_id']);
+																$fbtn = "";
+																if(checkFollowStatus($f['user_id']))
+																{
+																		$fbtn = '<td class="font-weight-medium"><button class="btn btn-sm btn-secondary text-white unfollowbtn" data-user-Id="' .$fuser['id'].'">disonnect</button></td>';
+																}
+																elseif($user['id']==$f['user_id'])
+																{
+																	$fbtn = '<td></td>';
+																}
+																else
+																{
+																		$fbtn = '<td class="font-weight-medium"><button class="btn btn-sm btn-primary followbtn" data-user-Id="' .$fuser['id'].'">Connect</button></td>';
+																}
+															
+															?>
+																<tbody>
+																	<tr>
+																		<td style="padding:2px; align-items: left;"><img src="assets/images/profile/<?=$fuser['profile_pic']?>" alt="user"></td>
+																		<td class="font-weight-medium " style="padding:2px; ">
+																			<a href="?u=<?=$fuser['username']?>" class="text-decoration-none text-dark"><p class="text-info align-items-left mb-0"><?=$fuser['name']?> <?=verified($fuser['profession'])?'<i class="bi-patch-check-fill text-primary"></i>':''?></p>
+																			<p class="mb-0 text-muted">@<?=$fuser['username']?></p>
+																		</td>
+																		<?=$fbtn?>
+																	</tr>
+																</tbody>
+															<?php
+															}
+															?>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+													
 								
 								
 								<?php
@@ -276,6 +405,7 @@ global $user;
 									echo '<h3 class=" p-5 bg-white border rounded text-center text-muted" >No Posts </h3>';
 								}
 								?>
+							</div>
 							</div>
 						</div>
 					</div>
@@ -367,6 +497,10 @@ global $user;
 							elseif($user['id']==$f['user_id'])
 							{
 								$fbtn = '<td></td>';
+							}
+							else
+							{
+								$fbtn = '<td class="font-weight-medium"><button class="btn btn-sm btn-primary text-white followbtn" data-user-Id="' .$fuser['id'].'">connect</button></td>';
 							}
 						?>
 							<tbody>

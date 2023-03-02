@@ -14,7 +14,6 @@ if(isset($_SESSION['Auth']))
                 <img src="" style="display:none" id="post_img" class="w-100 rounded border">
                 <form method="post" action="assets/php/actions.php?addpost" enctype="multipart/form-data">
                     <div class="my-3">
-
                         <input name="post_img" class="form-control" type="file" id="select_post_img">
                     </div>
                     <div class="mb-3">

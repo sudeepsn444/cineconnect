@@ -20,7 +20,7 @@ global $user;
           <div class="card">
               <div class="card-body">
                 <div class="d-flex justify-content-center">
-                    <img src="assets/images/profile/<?=$user['profile_pic']?>" class="rounded-circle p-1 bg-primary "  style="height:250px;" alt="...">
+                    <img src="assets/images/profile/<?=$user['profile_pic']?>"  id="profile_img" class="rounded-circle p-1 bg-primary "  style="height:250px;" alt="...">
                 </div>
                 
                 <form  method="post" action="assets/php/actions.php?updateprofile" enctype="multipart/form-data">
@@ -30,7 +30,7 @@ global $user;
                     </div>
                       <div class="input-group col-xs-12 d-flex justify-content-center">
                         <span class="input-group" style="width: 270px;">
-                          <input type="file" name="profile_pic" class="file-upload-browse btn btn-outline-primary" >
+                          <input type="file" name="profile_pic" class="file-upload-browse btn btn-outline-primary"   id="select_profile_img">
                         </span>
                       </div>
                       <?=showError('profile_pic')?>

@@ -25,6 +25,8 @@ function showError($field)
     }
 }
 
+
+
 //function for show previous form data
 function showFormData($field)
 {
@@ -251,7 +253,7 @@ function getUserByusername($username)
 function getPost()
 {
     global $db;
-    $query = "SELECT posts.id,posts.user_id,posts.post_img,posts.post_text,posts.created_at,users.name,users.profession,users.username,users.profile_pic FROM posts JOIN users ON users.id=posts.user_id ORDER by id DESC";
+    $query = "SELECT posts.id,posts.user_id,posts.post_img,posts.type,posts.post_text,posts.created_at,users.name,users.profession,users.username,users.profile_pic FROM posts JOIN users ON users.id=posts.user_id ORDER by id DESC";
     $run = mysqli_query($db, $query);
     return mysqli_fetch_all($run,true);
 }
@@ -646,6 +648,8 @@ function validateUpdateForm($form_data,$image_data)
             $image = basename($image_data['name']);
             $type = strtolower(pathinfo($image, PATHINFO_EXTENSION));
             $size=$image_data['size']/1000;
+            $len=$image_data['image_height'];
+            $wid=$image_data['image_width'];
             if($type!='jpg'&& $type!='jpeg'&& $type!='png')
             {
                 $response['msg'] = 'Only images with File Type ( jpg,jpeg,png ) are allowed!!';
@@ -654,10 +658,11 @@ function validateUpdateForm($form_data,$image_data)
             }
             if($size>3000)
             {
-                $response['msg'] = 'Image size should be less than 1 MB';
+                $response['msg'] = 'Image size should be less than 3 MB';
                 $response['status'] = false;
                 $response['field'] = 'profile_pic';
             }
+            
         }
     return $response;
 }
@@ -700,14 +705,14 @@ function updateProfile($data,$imagedata)
 }
 
 //for validating add post
-function validatePost($image_data)
+function validatePost($text,$image_data) 
 {
     $response=array();
     $response['status'] = true;
         
-        if(!$image_data['name'])
+        if(!$image_data['name'] && !$text)
         {
-            $response['msg'] = 'Please select a Image to POST';
+            $response['msg'] = 'Please Write somethige OR add a Post';
             $response['status'] = false;
             $response['field'] = 'post_img';
         }
@@ -716,19 +721,23 @@ function validatePost($image_data)
         {
             $image = basename($image_data['name']);
             $type = strtolower(pathinfo($image, PATHINFO_EXTENSION));
-            $size=$image_data['size']/1000;
-            if($type!='jpg'&& $type!='jpeg'&& $type!='png')
+            // $size=$image_data['size']/1000;
+            if($type!='jpg'&& $type!='jpeg'&& $type!='png' && $type!='mp4'&& $type!='mkv')
             {
-                $response['msg'] = 'Only images with File Type ( jpg,jpeg,png ) are allowed!!';
+                $response['msg'] = 'Only images with File Type ( jpg,jpeg,png,mp4,mkv ) are allowed!!';
                 $response['status'] = false;
                 $response['field'] = 'post_img';
             }
-            if($size>3000)
-            {
-                $response['msg'] = 'Image size should be less than 1 MB';
-                $response['status'] = false;
-                $response['field'] = 'post_img';
-            }
+            
+            
+
+        //use this if limit is required for the post size
+            // if($size>3000)
+            // {
+            //     $response['msg'] = 'Image size should be less than 1 MB';
+            //     $response['status'] = false;
+            //     $response['field'] = 'post_img';
+            // }
         }
     return $response;
 }
@@ -739,14 +748,19 @@ function createPost($text,$image)
     global $db;
     $post_text=mysqli_real_escape_string($db,$text['post_text']);
     $user_id=$_SESSION['userdata']['id'];
-    $image_name = time().basename($image['name']);
-    $image_dir = "../images/posts/$image_name";
-    move_uploaded_file($image['tmp_name'], $image_dir);
-   
-    
-
-    $query = "INSERT INTO posts(user_id,post_text,post_img) VALUES ($user_id,'$post_text','$image_name');";
-   
+    if($image['name'])
+    {
+        $image_type = basename($image['name']);
+        $type = strtolower(pathinfo($image_type, PATHINFO_EXTENSION));
+        $image_name = time().basename($image['name']);
+        $image_dir = "../images/posts/$image_name";
+        move_uploaded_file($image['tmp_name'], $image_dir);
+        $query = "INSERT INTO posts(user_id,post_text,post_img,type) VALUES ($user_id,'$post_text','$image_name','$type');";
+    }
+    else
+    {
+        $query = "INSERT INTO posts(user_id,post_text) VALUES ($user_id,'$post_text');";
+    }
     return mysqli_query($db,$query);
 }
 
