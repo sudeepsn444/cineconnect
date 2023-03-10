@@ -53,9 +53,15 @@ global $user;
 
     <nav class="navbar col-lg-12 col-12 p-0 fixed-bottom d-flex flex-col">
       <div class="navbar-menu-wrapper d-flex justify-content-around" style="width:100%;">
+        
         <div class="nav-item navbar-nav nav-profile dropdown justify-content-start ">
             <a class="nav-link text-dark count-indicator " href="?home" >
               <i class="bi-house-door-fill " style="font-size:22px;"></i>
+            </a>
+        </div>
+        <div class="nav-item navbar-nav nav-profile dropdown justify-content-start ">
+            <a class="nav-link text-dark count-indicator " href="?movies" >
+              <i class="bi-film " style="font-size:22px;"></i>
             </a>
         </div>
         <div class="nav-item navbar-nav nav-profile dropdown">
@@ -132,10 +138,16 @@ global $user;
         </ul>
 
         <div class="navbar-menu-wrapper d-flex justify-content-around" style="width:100%;">
+          
           <div class="nav-item navbar-nav nav-profile dropdown ">
               <a class="nav-link text-dark count-indicator " href="?home" >
                 <i class="bi-house-door-fill " style="font-size:22px;"></i>
               </a>
+          </div>
+          <div class="nav-item navbar-nav nav-profile dropdown justify-content-start ">
+            <a class="nav-link text-dark count-indicator " href="?movies" >
+              <i class="bi-film " style="font-size:22px;"></i>
+            </a>
           </div>
           <div class="nav-item navbar-nav nav-profile dropdown">
               <a class="nav-link text-dark count-indicator" data-bs-toggle="modal" data-bs-target="#addpost" href="#" >

@@ -148,6 +148,8 @@ if(isset($_SESSION['Auth']))
 <?php
 } 
 ?>
+  <script src="assets/js/key.js"></script>
+  <script src="assets/js/movie.js"></script>
   <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- plugins:js -->
   <script src="assets/bootstrap/vendors/js/vendor.bundle.base.js"></script>

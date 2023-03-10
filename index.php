@@ -46,6 +46,16 @@ elseif(isset($_SESSION['Auth'])&& isset($_GET['editprofile'])&& $user['ac_status
   showPage('navbar');
   showPage('edit_profile');
 }
+
+
+elseif(isset($_SESSION['Auth'])&& isset($_GET['movies'])&& $user['ac_status']==1)
+{
+  showPage('header',['page_title'=>'cineconnect - Movies']);
+  showPage('navbar');
+  showPage('movies');
+}
+
+
 elseif(isset($_SESSION['Auth'])&& isset($_GET['u'])&& $user['ac_status']==1)
 {
   $profile = getUserByusername($_GET['u']);
