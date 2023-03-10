@@ -194,7 +194,7 @@ global $user;
 							}
 						?>
 						<div class=" d-flex-fluid " >
-							<div class=" d-flex flex-wrap justify-content-around" >
+							<div class=" d-flex flex-wrap justify-content-start " >
 								<?php
 								if (checkFollowStatus($profile['id'])||($user['id'] == $profile['id'])) {
 
@@ -202,50 +202,53 @@ global $user;
 									{
 										$comments=getComments($post['id']);
 										$likes = getLikes($post['id']);
-										?>
-									<div class="d-flex align-items-center" >
+								?>
+									<div class="d-flex align-items-center border " style="margin:2px;height:361px;width:361px;overflow:hidden;">
 									<?php
     						        if(!$post['post_img']=="")
     						        {
 										if($post['type']=="jpg"||$post['type']=="jpeg"||$post['type']=="png")
 										{
     						        	?>
-    						        	<img src="assets/images/posts/<?= $post['post_img'] ?>" width="345px" style="margin: 4px;" data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>"/>
+    						        	<img src="assets/images/posts/<?= $post['post_img']?>" style="width:361px;"  data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>"/>
 										<?php
 										}
 										elseif($post['type']=="mkv"||$post['type']=="mp4")
 										{
 										?>
-										<img src="assets/images/posts/video-thumbnail.jpg" width="345px" style="margin: 4px;" data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>">
+										<img src="assets/images/posts/video-thumbnail.jpg" style="width:361px;"  data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>">
 										<?php
 										}
 									}
 									else
 									{
     						        ?>
-									<div class="card-body" style="padding-left: 5;padding-left: 5px; width:345px; padding-right: 5px;padding-top: 5px;padding-bottom: 5px;" data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>">
-    						            <p class="h5"><?=$post['post_text']?></p>
-    						        </div>
+										<div class="card-body " style="text-align: justify; padding:5px;" data-bs-toggle="modal" data-bs-target="#postview<?= $post['id'] ?>">
+    						        	    <p class="h5"><?=$post['post_text']?></p>
+    						        	</div>
 									<?php
 									}
 									?>
 									</div>
 									<!-- this is for postview-->
     								<div class="modal fade" id="postview<?= $post['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    								    <div class="modal-dialog ">
+    								    <div class="modal-dialog modal-dialog-centered " style="margin-top: 30px;">
     								        <div class="modal-content">
 
     								            <div class="modal-body  d-flex-fluid flex-row p-0">
 													
     								                <div class="col p-0">
-														<div class="d-flex align-items-center p-2 border-bottom">
-    								                        <div><img src="assets/images/profile/<?= $profile['profile_pic'] ?>" alt="" height="50" class="rounded-circle border">
-    								                        </div>
-    								                        <div>&nbsp;&nbsp;&nbsp;</div>
-    								                        <div class="d-flex flex-column justify-content-start align-items-center">
-    								                            <h6 style="margin: 0px;"><?= $profile['name'] ?>&nbsp;&nbsp;<?= verified($profile['profession']) ? '<i class="bi-patch-check-fill text-primary"></i>' : '' ?></h6>
-    								                            <h7 style="margin:0px;" class="text-muted">@<?= $profile['username'] ?></h7>
-    								                        </div>
+														<div class="d-flex  justify-content-between p-2 border-bottom">
+    								                        <div class="d-flex flex-row align-items-center">
+																<img src="assets/images/profile/<?= $profile['profile_pic'] ?>" alt="" height="50" class="rounded-circle border">
+																<div class="d-flex flex-column justify-content-start ml-2">
+    								                        	    <h6 style="margin: 0px;"><?= $profile['name'] ?>&nbsp;&nbsp;<?= verified($profile['profession']) ? '<i class="bi-patch-check-fill text-primary"></i>' : '' ?></h6>
+    								                        	    <h7 style="margin:0px;" class="text-muted">@<?= $profile['username'] ?></h7>
+																</div>
+															</div>
+    								                        
+															<a type="button" class="ti-close justify-content-end m-3" data-bs-dismiss="modal" aria-label="Close"></a>
+
     								                    </div>
     								                    
 															<?php
@@ -268,7 +271,7 @@ global $user;
 															{
     						        						?>
 															<div class="card-body" style="padding: 20px;">
-    						        						    <p class="h3"><?=$post['post_text']?></p>
+    						        						    <p class="h3" style="text-align: justify;" ><?=$post['post_text']?></p>
     						        						</div>
 															<?php
 															}
@@ -276,7 +279,7 @@ global $user;
     								                	
     								                </div>
 													<div class=" col p-2">
-														<span style="font-size: x-larger;" class="p-2">
+														<span style="font-size: x-larger;" class="p-2 d-flex flex-row justify-content-between">
 															<?php
 															if (checkLikeStatus($post['id'])) 
 															{
@@ -289,17 +292,49 @@ global $user;
 																$display_unlike = 'none';
 															}
 															?>
+																<div>
 																<i class="bi-heart-fill text-danger unlike_btn" style="display:<?=$display_unlike?>"  data-post-Id='<?=$post['id']?>'></i>
-																<i class="bi-heart like_btn" style="display:<?=$display_like?>"  data-post-Id='<?=$post['id']?>'></i><span class="pl-2 text-small text-muted" data-bs-toggle="modal" data-bs-target="#like<?=$post['id']?>"><?=count($likes)?> likes </span>
-																&nbsp;&nbsp;&nbsp;<i class="bi-chat-left text-dark " ></i>  <span  class="pl-2 text-small text-muted">&nbsp;<?=count($comments)?> comments</span>
+																<i class="bi-heart like_btn" style="display:<?=$display_like?>"  data-post-Id='<?=$post['id']?>'></i><span class="pl-2 text-small text-dark" data-bs-toggle="modal" data-bs-target="#like<?=$post['id']?>"><span id="likecount<?=$post['id']?>"><?=count($likes)?></span> likes </span>
+																&nbsp;&nbsp;&nbsp;<i class="bi-chat-left text-dark " ></i>  <span  class="pl-2 text-small text-dark">&nbsp;<span id="commentcount<?=$post['id']?>"><?=count($comments)?></span> comments</span>&nbsp;&nbsp;<span style="font-size:small" class="text-muted">( Posted <?=show_time($post['created_at'])?> )</span>
+																</div>
+																<?php
+																	if($user['id'] == $profile['id'])
+																	{
+																?>
+																	<span class="dropdown">
+																		<i class="ti-more-alt" id="option<?=$post['id']?>" data-bs-toggle="dropdown" aria-expanded="false"></i>
+																		<ul class="dropdown-menu" aria-labelledby="option<?=$post['id']?>">
+																	    	<li><a class="dropdown-item" href="assets/php/actions.php?deletepost=<?=$post['id']?>"><i class="bi bi-trash-fill"></i> Delete Post</a></li>
+																	  	</ul>
+																	</span>
+																<?php
+																	}
+																?>
+																
 														</span>
+														<?php
+    						        					if($post['post_text']&&$post['post_img'])
+    						        					{
+    						        					?>
+														<div class="card-body" style="padding-left: 5;padding-left: 5px;padding-right: 5px;padding-top: 5px;padding-bottom: 5px;">
+    						        					    <p class="font-weight-500"><span class="text-muted">@<?=$profile['username']?>  </span><?=$post['post_text']?></p>
+    						        					</div>
+    						        					<?php
+    						        					}
+    						        					?>
+														
 													</div>
 			
 													
 
     								                <div class="col ">
-    								                    
-    								                    <div class="flex-fill align-self-stretch overflow-auto" id="comment-section<?= $post['id'] ?>" style="height: 100px;">
+													<div class="input-group p-2 border-top border-bottom">
+    								                        <input type="text" class="form-control rounded-0 border-0 comment-input" placeholder="say something.."
+    								                            aria-label="Recipient's username" aria-describedby="button-addon2">
+    								                        <button class="btn btn-primary rounded-2 border-0 add-comment" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
+    								                            id="button-addon2">Post</button>
+    								                    </div>
+    								                    <div class="flex-fill align-self-stretch overflow-auto" id="comment-section<?= $post['id'] ?>" style="height:200px;">
 
 														<?php
 														$comments = getComments($post['id']);
@@ -316,8 +351,8 @@ global $user;
     								                            </div>
     								                            <div>&nbsp;&nbsp;&nbsp;</div>
     								                            <div class="d-flex flex-column justify-content-start align-items-start">
-																	<a href="?u=<?= $cuser['username'] ?>" class="text-decoration-none text-dark"><p class="text-muted align-items-left mb-0">@<?= $cuser['username'] ?> <?= verified($cuser['profession']) ? '<i class="bi-patch-check-fill text-primary"></i>' : '' ?></p></a>
-																	<p style="margin:0px;" class="text-muted"><?= $comment['comment'] ?></p>
+																	<a href="?u=<?= $cuser['username'] ?>" class="text-decoration-none text-dark"><span class="text-muted align-items-left mb-0">@<?= $cuser['username'] ?> <?= verified($cuser['profession']) ? '<i class="bi-patch-check-fill text-primary"></i>' : '' ?></span> - <span style="margin:0px;" class="text-dark"><?= $comment['comment'] ?></span></a>
+																	<p style="margin:0px;" class="text-muted">(<?=show_time($comment['created_at'])?>)</p>
     								                            </div>
     								                        </div>
 
@@ -325,12 +360,7 @@ global $user;
 														}
 														?>
     								                    </div>
-    								                    <div class="input-group p-2 border-top">
-    								                        <input type="text" class="form-control rounded-0 border-0 comment-input" placeholder="say something.."
-    								                            aria-label="Recipient's username" aria-describedby="button-addon2">
-    								                        <button class="btn btn-outline-primary rounded-0 border-0 add-comment" data-cs="comment-section<?= $post['id'] ?>" data-post-id="<?= $post['id'] ?>" type="button"
-    								                            id="button-addon2">Post</button>
-    								                    </div>
+    								                    
     								                </div>
 																		
 
@@ -342,15 +372,14 @@ global $user;
     								</div>
 									<!-- who liked -->
 									<div class="modal fade" id="like<?=$post['id']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-										<div class="modal-dialog ">
+										<div class="modal-dialog "style="margin-top:30px">
 											<div class="modal-content">
-												<div class="modal-header">
-													<h5 class="modal-title">Likes</h5>
-													<a type="button" class="ti-close" data-bs-dismiss="modal" aria-label="Close"></a>
-													<hr>
-												</div>
+											<div class="modal-header">
+            									    <h5 class="modal-title">likes</h5>
+            									    <a type="button" class="ti-close" data-bs-dismiss="modal" aria-label="Close"></a>
+            									</div>
 												<div class="modal-body">
-													<div class="table-responsive">
+													<div class="table-responsive" style="height:500px;">
 														<table class="table  table-striped table-borderless mb-2" >
 															<?php
 															if(count($likes)<1)
@@ -426,56 +455,55 @@ global $user;
 				
             </div>
             <div class="modal-body">
-				<div class="table-responsive">
-					<table class="table  table-striped table-borderless mb-2" >
-						<?php
-						foreach($profile['followers'] as $f)
+				<?php
+					foreach($profile['followers'] as $f)
+					{
+						$fuser = getUser($f['follower_id']);
+						$fbtn = "";
+						if(checkFollowStatus($f['follower_id']))
 						{
-							$fuser = getUser($f['follower_id']);
-							$fbtn = "";
-							if(checkFollowStatus($f['follower_id']))
-							{
-									$fbtn = '<td class="font-weight-medium"><button class="btn btn-sm btn-secondary text-white unfollowbtn" data-user-Id="' .$fuser['id'].'">disonnect</button></td>';
-							}
-							elseif($user['id']==$f['follower_id'])
-							{
-								$fbtn = '<td></td>';
-							}
-							elseif(checkBS($fuser['id']))
-							{
-								$fbtn = '<td class="font-weight-medium"><button class="btn btn-sm btn-danger text-white" disabled >Blocked</button></td>';
-							}
-							else
-							{
-								$fbtn = '<td class="font-weight-medium"><button class="btn btn-sm btn-primary followbtn" data-user-Id="' .$fuser['id'].'">Connect</button></td>';
-							}
-						
-						?>
-							<tbody>
-                				<tr>
-                				  	<td style="padding:2px; align-items: left;"><img src="assets/images/profile/<?=$fuser['profile_pic']?>" alt="user"></td>
-									<td class="font-weight-medium " style="padding:2px; ">
-										<a href="?u=<?=$fuser['username']?>" class="text-decoration-none text-dark"><p class="text-info align-items-left mb-0"><?=$fuser['name']?> <?=verified($fuser['profession'])?'<i class="bi-patch-check-fill text-primary"></i>':''?></p>
-										<p class="mb-0 text-muted">@<?=$fuser['username']?></p>
-									</td>
-									
-									<?=$fbtn?>
-								</tr>
-							</tbody>
-						<?php
+								$fbtn = '<button class="btn btn-sm btn-secondary text-white unfollowbtn" data-user-Id="' .$fuser['id'].'">disonnect</button>';
 						}
-						?>
-					</table>
+						elseif($user['id']==$f['follower_id'])
+						{
+							$fbtn = '<button class="btn btn-outline-white rounded-0 border-0" disabled"></button>';
+						}
+						elseif(checkBS($fuser['id']))
+						{
+							$fbtn = '<button class="btn btn-sm btn-danger text-white" disabled >Blocked</button>';
+						}
+						else
+						{
+							$fbtn = '<button class="btn btn-sm btn-primary followbtn" data-user-Id="' .$fuser['id'].'">Connect</button>';
+						}
+					
+					?>
+        		<div class="preview-item-content" >
+        		  <div class="d-flex flex-row justify-content-between align-items-center p-2">
+        		        <div class="d-flex flex-row">
+        		          	<img src="assets/images/profile/<?=$fuser['profile_pic']?>" alt="" height="40" width="40" class="rounded-circle border">
+        		          	<div class="d-flex flex-column justify-content-center text-muted ml-3"     >
+						  		<a href="?u=<?=$fuser['username']?>" class="text-decoration-none text-dark"><p class="text-dark align-items-left mb-0"><?=$fuser['name']?> <?=verified($fuser['profession'])?'<i class="bi-patch-check-fill text-primary"></i>':''?></p></a>
+        		          		<p class="mb-0 text-muted">@<?=$fuser['username']?></p>    
+							</div>
+        		        </div>
+        		        <div class="d-flex align-items-center">
+							<?=$fbtn?>
+        		        </div>
+        		  </div>
 				</div>
-            </div>
+        		<?php
+        		}
+        		?>
+			</div>
         </div>
     </div>
-  </div>
+</div>
 
 
 
 	<!-- this is for following list -->
-<div class="modal fade" id="following_list" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="following_list" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog ">
     	<div class="modal-content">
             <div class="modal-header">
@@ -483,43 +511,48 @@ global $user;
                 <a type="button" class="ti-close" data-bs-dismiss="modal" aria-label="Close"></a>
             </div>
             <div class="modal-body">
-				<div class="table-responsive">
-					<table class="table  table-striped table-borderless mb-2" >
-						<?php
-						foreach($profile['following'] as $f)
+			<?php
+					foreach($profile['following'] as $f)
+					{
+						$fuser = getUser($f['user_id']);
+						$fbtn = "";
+						if(checkFollowStatus($f['user_id']))
 						{
-							$fuser = getUser($f['user_id']);
-							$fbtn = "";
-							if(checkFollowStatus($f['user_id']))
-							{
-								$fbtn = '<td class="font-weight-medium"><button class="btn btn-sm btn-secondary text-white unfollowbtn" data-user-Id="' .$fuser['id'].'">disonnect</button></td>';
-							}
-							elseif($user['id']==$f['user_id'])
-							{
-								$fbtn = '<td></td>';
-							}
-							else
-							{
-								$fbtn = '<td class="font-weight-medium"><button class="btn btn-sm btn-primary text-white followbtn" data-user-Id="' .$fuser['id'].'">connect</button></td>';
-							}
-						?>
-							<tbody>
-                				<tr>
-                				  	<td style="padding:2px; align-items: left;"><img src="assets/images/profile/<?=$fuser['profile_pic']?>" alt="user"></td>
-									<td class="font-weight-medium " style="padding:2px; ">
-										<a href="?u=<?=$fuser['username']?>" class="text-decoration-none text-dark"><p class="text-info align-items-left mb-0"><?=$fuser['name']?> <?=verified($fuser['profession'])?'<i class="bi-patch-check-fill text-primary"></i>':''?></p>
-										<p class="mb-0 text-muted">@<?=$fuser['username']?></p>
-									</td>
-									<?=$fbtn?>
-								</tr>
-							</tbody>
-						<?php
+							$fbtn = '<button class="btn btn-sm btn-secondary text-white unfollowbtn" data-user-Id="' .$fuser['id'].'">disonnect</button>';
 						}
-						?>
-					</table>
+						elseif($user['id']==$f['user_id'])
+						{
+							$fbtn = '<button class="btn btn-outline-white rounded-0 border-0" disabled"></button>';
+						}
+						
+						else
+						{
+							$fbtn = '<button class="btn btn-sm btn-primary followbtn" data-user-Id="' .$fuser['id'].'">Connect</button>';
+						}
+					
+					?>
+        		<div class="preview-item-content" >
+        		  <div class="d-flex flex-row justify-content-between align-items-center p-2">
+        		        <div class="d-flex flex-row">
+        		          	<img src="assets/images/profile/<?=$fuser['profile_pic']?>" alt="" height="40" width="40" class="rounded-circle border">
+        		          	<div class="d-flex flex-column justify-content-center text-muted ml-3"     >
+						  		<a href="?u=<?=$fuser['username']?>" class="text-decoration-none text-dark"><p class="text-dark align-items-left mb-0"><?=$fuser['name']?> <?=verified($fuser['profession'])?'<i class="bi-patch-check-fill text-primary"></i>':''?></p></a>
+        		          		<p class="mb-0 text-muted">@<?=$fuser['username']?></p>    
+							</div>
+        		        </div>
+        		        <div class="d-flex align-items-center">
+							<?=$fbtn?>
+        		        </div>
+        		  </div>
 				</div>
+        		<?php
+        		}
+        		?>
             </div>
         </div>
     </div>
-  </div>
+  </div>  
+
+
+
   

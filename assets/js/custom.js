@@ -6,6 +6,8 @@ function preview()
 {
     var filobject=this.files[0];
     var filereader=new FileReader();
+    var fileName = filobject.name;
+    var type = fileName.split(".").pop();
 
     filereader.readAsDataURL(filobject);
 
@@ -13,8 +15,21 @@ function preview()
     {
         var image_src= filereader.result;
         var image=document.querySelector("#post_img");
-        image.setAttribute('src',image_src)
-        image.setAttribute('style','display:')
+        if(type=="jpg"||type=="png"||type=="jpeg")
+        {
+          image.setAttribute('src',image_src)
+          image.setAttribute('style','display:')
+        }
+        else if(type=="mp4"||type=="mkv")
+        {
+          var video = document.createElement("video");
+          video.setAttribute("src", image_src);
+          video.setAttribute("style", "display:");
+          video.setAttribute("controls", "");
+          video.setAttribute("class", "w-100 rounded border");
+          var image = document.querySelector("#post_img");
+          image.replaceWith(video);
+        }
     }
 }
 
@@ -40,6 +55,15 @@ function preview_profile()
         image.setAttribute('src',image_src)
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -123,11 +147,12 @@ $(".like_btn").click(function(){
     success:function (response){
       if(response.status){
 
-          $(button).data('userId',0)
+          // $(button).data('userId',0)
+          $(button).attr('disabled', false);
           $(button).hide();
           $(button).siblings('.unlike_btn').show();
           $('#likecount' + post_id_v).text($('#likecount' + post_id_v).text() - (-1));
-          location.reload(); 
+          // location.reload(); 
       }
       else
       {
@@ -154,11 +179,12 @@ $(".unlike_btn").click(function(){
     success:function (response){
       if(response.status){
 
-          $(button).data('userId',0)
+          // $(button).data('userId',0)
+          $(button).attr('disabled', false);
           $(button).hide();
           $(button).siblings('.like_btn').show();
           $('#likecount' + post_id_v).text($('#likecount' + post_id_v).text() - 1);
-          location.reload();
+          // location.reload();
       }
       else
       {
@@ -267,15 +293,19 @@ $(".add-comment").click(function(){
       console.log(response)
       if(response.status){
 
-          $(button).data('userId',0)
+          // $(button).data('userId',0)
+          $(button).attr('disabled', false);
           $(button).siblings('.comment-input').attr('disable',false);
           $(button).siblings('.comment-input').val('');
-          $("#"+cs).append(response.comment);
+          $("#"+cs).prepend(response.comment);
           $('.nce').hide();
-          if(page='wall')
+          $('#commentcount' + post_id_v).text($('#commentcount' + post_id_v).text() - (-1));
+          if(page=="wall")
           {
             location.reload();
           }
+          
+          
          
       }
       else
@@ -368,8 +398,7 @@ $('#sendmsg').click(function(){
     }
     
   })
-  // console.log(msg);
-  // console.log(user_id);
+  
 
 })
 
@@ -398,6 +427,7 @@ function synmsg(){
         $("#chatter_name").text(json.chat.userdata.name);
         $("#user_chat").html(json.chat.msgs);
         $("#chatter_username").text(json.chat.userdata.username);
+        $("#chatter_username_id").attr('href','?u='+json.chat.userdata.username);
         $("#chatter_pic").attr('src','assets/images/profile/'+json.chat.userdata.profile_pic);
       }
 
@@ -463,29 +493,37 @@ else {
 
 
 
-// let options={
-//   root:null,
-//   rootMargin:'0px',
-//   threshold:1.0
-// };
-// let callback=(entries,observer)=>{
-//   entries.forEach(entry=>{
-//     if(entry.target.id=="myvideo")
-//     {
-//       if(entry.isIntersecting)
-//       {
-//         entry.target.play();
-//       }
-//       else
-//       {
-//         entry.target.pause();
-//       }
-//     }
-//   });
-// }
-// let observer=new IntersectionObserver(callback,options);
 
-// observer.observe(document.querySelector('#myvideo'));
+//JavaScript code to apply the "Read More" button to each post 
+$(document).ready(function() {
+        var maxLength = 1000; // maximum number of characters to show
+        
+        // loop through each post and apply the "Read More" button
+        $(".post").each(function() {
+            var content = $(this).find(".post-text").text();
+            
+            // if the content is longer than the maximum, add the "Read More" button
+            if (content.length > maxLength) {
+                var shortContent = content.substr(0, maxLength);
+                var longContent = content.substr(maxLength);
+                var html = shortContent + '<span class="dots" >...</span><span class="more" style="display: none;">' + longContent + '</span>';
+                $(this).find(".post-text").html(html);
+                $(this).find(".read-more").show();
+                
+                // toggle the visibility of the long content when the button is clicked
+                $(this).find(".read-more").click(function() {
+                    $(this).prev(".post-text").find(".dots, .more").toggle();
+                    $(this).text(function(_, text) {
+                        return text === "Read Less" ? "Read More" : "Read Less";
+                    });
+                });
+            }
+            else
+            {
+              $(this).find(".read-more").hide();
+            }
+        });
+    });
 
 
-
+ 

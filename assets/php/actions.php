@@ -24,6 +24,19 @@ if(isset($_GET['signup']))
     header("location:../../?signup");
     }
 }
+
+//for deleting a post 
+if(isset($_GET['deletepost'])){
+    $post_id = $_GET['deletepost'];
+      if(deletePost($post_id)){
+          header("location:{$_SERVER['HTTP_REFERER']}");
+      }else{
+          echo "something went wrong";
+      }
+  
+    
+  }
+
 // for managing login
 if(isset($_GET['login']))
 {

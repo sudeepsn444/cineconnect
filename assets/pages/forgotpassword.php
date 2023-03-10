@@ -1,8 +1,10 @@
-
-    <div class="login">
-        <div class="col-4 bg-white border rounded p-4 shadow-sm">
-        
-        <?php
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="content-wrapper d-flex align-items-center auth px-0">
+        <div class="row w-100 mx-0">
+          <div class="col-lg-4 mx-auto">
+            <div class="auth-form-light text-left py-5 px-4 px-sm-5 border rounded shadow-sm">
+            <?php
         if (isset($_SESSION['forgot_code'])&& !isset($_SESSION['auth_temp']))
         {
             $action = "verifycode";
@@ -70,12 +72,14 @@
                 <br>
                 <br>
                 <br>
-                <a href="?login" class="text-decoration-none mt-5"><i class="bi bi-arrow-left-circle-fill"></i> Go Back
-                    To
-                    Login</a>
+                <a href="?login" class="text-decoration-none mt-5"><i class="bi bi-arrow-left-circle-fill"></i> Go Back To Login</a>
             </form>
+            </div>
+          </div>
         </div>
+      </div>
+      
     </div>
-
-
    
+  </div>
+  

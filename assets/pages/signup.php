@@ -22,7 +22,7 @@
                   <?=showError('username')?>
                 </div>
                 <div class="form-group">
-                  <input type="text" name="dateofbirth" class="form-control form-control-lg text-muted" value="<?=showFormData('dateofbirth')?>" id="exampleInputUsername1" placeholder="date of birth">
+                  <input type="date" name="dateofbirth" class="form-control form-control-lg text-muted" value="<?=showFormData('dateofbirth')?>" id="exampleInputUsername1" placeholder="date of birth">
                   <?=showError('dateofbirth')?>
                 </div>
                 <div class="form-group">

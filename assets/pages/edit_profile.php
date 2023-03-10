@@ -20,7 +20,7 @@ global $user;
           <div class="card">
               <div class="card-body">
                 <div class="d-flex justify-content-center">
-                    <img src="assets/images/profile/<?=$user['profile_pic']?>"  id="profile_img" class="rounded-circle p-1 bg-primary "  style="height:250px;" alt="...">
+                    <img src="assets/images/profile/<?=$user['profile_pic']?>"  id="profile_img" class="rounded-circle p-1 bg-primary "  style="height:250px;width:250px;" alt="...">
                 </div>
                 
                 <form  method="post" action="assets/php/actions.php?updateprofile" enctype="multipart/form-data">
@@ -67,7 +67,7 @@ global $user;
             <div class="form-group row">
               <label class="col-sm-3 col-form-label">Date of Birth</label>
               <div class="col-sm-9">
-                <input type="text" name="dateofbirth" value="<?= $user['dateofbirth']?>" class="form-control text-muted" placeholder="dd/mm/yyyy"/>
+                <input type="date" name="dateofbirth" value="<?= $user['dateofbirth']?>" class="form-control text-muted" placeholder="dd/mm/yyyy"/>
               <?=showError('dateofbirth')?>
               </div>
              </div>

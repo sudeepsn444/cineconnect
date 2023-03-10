@@ -71,13 +71,14 @@ if(isset($_GET['addcomment']))
             $cuser=getUser($_SESSION['userdata']['id']);
             $verify=(verified($cuser['profession']))?'<i class="bi-patch-check-fill text-primary"></i>':'';
             $response['status'] = true;
-        $response['comment'] = '<div class="d-flex align-items-center p-2">
+            $response['comment'] = '<div class="d-flex align-items-center p-2">
             <div><img src="assets/images/profile/' . $cuser['profile_pic'] . '" alt="" height="40" class="rounded-circle border">
             </div>
             <div>&nbsp;&nbsp;&nbsp;</div>
-            <div class="d-flex flex-column justify-content-start align-items-start">
-                <a href="?u=' . $cuser['username'] . '" class="text-decoration-none text-dark"><p class="text-muted align-items-left mb-0">@' . $cuser['username'] ." ".$verify.'</p></a>
-                <p style="margin:0px;" class="text-muted">' . $_POST['comment'] . "</p>
+            <div class="d-flex flex-row justify-content-start align-items-start">
+                <a href="?u=' . $cuser['username'] . '" class="text-decoration-none text-dark"><span class="text-muted align-items-left mb-0">@' . $cuser['username'] ." ".$verify.'</span></a>
+                - <span style="margin:0px;" class="text-dark">' . $_POST['comment'] . "</span>
+                
             </div>
         </div>";
         }

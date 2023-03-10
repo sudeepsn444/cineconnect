@@ -547,7 +547,8 @@ function createUser($data)
     $password=mysqli_real_escape_string($db,$data['password']);
     $profession=$data['profession'];
     $phonenumber=mysqli_real_escape_string($db,$data['phonenumber']);
-    $dateofbirth=mysqli_real_escape_string($db,$data['dateofbirth']);
+    // $dateofbirth=mysqli_real_escape_string($db,$data['dateofbirth']);
+    $dateofbirth=date('y-m-d',strtotime($_POST['dateofbirth']));
     $password = md5($password);
     $about=mysqli_real_escape_string($db,$data['about']);
     $experience=mysqli_real_escape_string($db,$data['experience']);
@@ -648,8 +649,8 @@ function validateUpdateForm($form_data,$image_data)
             $image = basename($image_data['name']);
             $type = strtolower(pathinfo($image, PATHINFO_EXTENSION));
             $size=$image_data['size']/1000;
-            $len=$image_data['image_height'];
-            $wid=$image_data['image_width'];
+            // $len=$image_data['image_height'];
+            // $wid=$image_data['image_width'];
             if($type!='jpg'&& $type!='jpeg'&& $type!='png')
             {
                 $response['msg'] = 'Only images with File Type ( jpg,jpeg,png ) are allowed!!';
@@ -761,6 +762,22 @@ function createPost($text,$image)
     {
         $query = "INSERT INTO posts(user_id,post_text) VALUES ($user_id,'$post_text');";
     }
+    return mysqli_query($db,$query);
+}
+
+//for deleting a post
+function deletePost($post_id){
+    global $db;
+$user_id=$_SESSION['userdata']['id'];
+    $dellike = "DELETE FROM likes WHERE post_id=$post_id && user_id=$user_id";
+    mysqli_query($db,$dellike);
+    $delcom = "DELETE FROM comments WHERE post_id=$post_id && user_id=$user_id";
+    mysqli_query($db,$delcom);
+    $not = "UPDATE notifications SET read_status=2 WHERE post_id=$post_id && to_user_id=$user_id";
+mysqli_query($db,$not);
+
+
+    $query = "DELETE FROM posts WHERE id=$post_id";
     return mysqli_query($db,$query);
 }
 
